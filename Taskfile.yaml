@@ -1,0 +1,46 @@
+version: '3'
+
+tasks:
+  run:
+    desc: "Run the Go application"
+    cmds:
+      - go run main.go
+    sources:
+      - main.go
+    deps:
+      - build
+
+  test:
+    desc: "Run tests"
+    cmds:
+      - go test -v ./...
+    sources:
+      - main.go
+      - main_test.go
+    deps:
+      - build
+
+  build:
+    desc: "Build the Go application"
+    cmds:
+      - go build -o app main.go
+
+  clean:
+    desc: "Clean up the build"
+    cmds:
+      - rm -f app
+
+  run-container:
+    desc: "Run the PostgreSQL container"
+    cmds:
+      - |
+        docker compose up -d
+    silent: true
+    ignore_error: true
+
+  stop-container:
+    desc: "Stop and remove the PostgreSQL container"
+    cmds:
+      - docker compose down
+    silent: true
+    ignore_error: true
